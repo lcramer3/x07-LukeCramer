@@ -51,6 +51,7 @@ class TicTacToeBoard
   	 * is not over, or Blank if the board is filled and no one has won.
   	**/
   	Piece getWinner();
+	Piece getTurn();
 };
 
 #endif
