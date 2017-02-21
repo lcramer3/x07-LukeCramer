@@ -47,8 +47,9 @@ void TicTacToeBoard::clearBoard()
 **/ 
 Piece TicTacToeBoard::placePiece(int row, int column)
 {
-	if (row > BOARDSIZE || row < 1 || column > BOARDSIZE || column < 1)
+	if (row >= BOARDSIZE || row < 0 || column >= BOARDSIZE || column < 0)
 	{
+		toggleTurn();
 		return Invalid;
 	}
 	else
@@ -56,6 +57,7 @@ Piece TicTacToeBoard::placePiece(int row, int column)
 		Piece temp_piece = getPiece(row, column);
 		if (temp_piece == X || temp_piece == O)
 		{
+			toggleTurn();
 			return temp_piece;	
 		} else if (temp_piece == Blank)
 		{
@@ -72,6 +74,7 @@ Piece TicTacToeBoard::placePiece(int row, int column)
 		}
 		else // an error occured
 		{
+			toggleTurn();
 			return Invalid;
 		}
 	}
@@ -83,7 +86,7 @@ Piece TicTacToeBoard::placePiece(int row, int column)
 **/
 Piece TicTacToeBoard::getPiece(int row, int column)
 {
-  return board[row][column];
+	return board[row][column];
 }
 
 /**
@@ -92,7 +95,70 @@ Piece TicTacToeBoard::getPiece(int row, int column)
 **/
 Piece TicTacToeBoard::getWinner()
 {
-  return Invalid;
+	Piece checkWinner[BOARDSIZE];
+	bool boardFull = true;
+	// Checks each row
+	for (unsigned int i = 0; i < BOARDSIZE; i++)
+	{
+		for (unsigned int j = 0; j < BOARDSIZE; j++)
+		{
+			checkWinner[j] = board[i][j];
+			if (board[i][j] == Blank)
+			{
+				boardFull = false;
+			}
+			if (checkWinner[0] == X && checkWinner[1] == X && checkWinner[2] == X)
+			{
+				return X;
+			}
+			else if (checkWinner[0] == O && checkWinner[1] == O && checkWinner[2] == O)
+			{
+				return O;
+			}
+		}
+		checkWinner[2] = Blank;
+	}
+	// Checks each col
+	for (unsigned int j = 0; j < BOARDSIZE; j++)
+	{
+		for (unsigned int i = 0; i < BOARDSIZE; i++)
+		{
+			checkWinner[i] = board[i][j];
+			
+			if (checkWinner[0] == X && checkWinner[1] == X && checkWinner[2] == X)
+			{
+				return X;
+			}
+			else if (checkWinner[0] == O && checkWinner[1] == O && checkWinner[2] == O)
+			{
+				return O;
+			}
+		}
+		checkWinner[2] = Blank;
+	}
+	// Checks diagonals for winner
+	if (board[0][0] == X && board[1][1] == X && board[2][2] == X)
+	{
+		return X;
+	}
+	else if (board[0][2] == X && board[1][1] == X && board[2][0] == X)
+	{
+		return X;
+	}
+	else if (board[0][0] == O && board[1][1] == O && board[2][2] == O)
+	{
+		return O;
+	}
+	else if (board[0][2] == O && board[1][1] == O && board[2][0] == O)
+	{
+		return O;
+	}
+	if (boardFull)
+	{
+		return Blank;
+	}
+	// All checks Failed...
+	return Invalid;
 }
 
 Piece TicTacToeBoard::getTurn()
