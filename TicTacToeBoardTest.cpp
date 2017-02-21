@@ -43,3 +43,19 @@ TEST(TicTacToeBoardTest, constructorCheck)
 	Piece turn = b.getTurn();
 	ASSERT_EQ(turn, X);
 }
+
+TEST(TicTacToeBoardTest, placePieceCheck)
+{
+	TicTacToeBoard b;
+	Piece result = b.placePiece(1,2);
+	ASSERT_EQ(result, X);
+}
+
+TEST(TicTacToeBoardTest, placePieceAfterTurnCheck)
+{
+	TicTacToeBoard b;
+	Piece result;
+	b.placePiece(1,1);
+	result = b.placePiece(1,2);
+	ASSERT_EQ(result, O);
+}
